@@ -10,10 +10,15 @@ import random
 import constants as c
 
 class SIMULATION:
-    def __init__(self):
+    def __init__(self, directOrGUI):
+        
+        if directOrGUI == "DIRECT":
+            self.physicsClient = p.connect(p.DIRECT)
+        else:
+            self.physicsClient = p.connect(p.GUI)
+        
         
 
-        self.physicsClient = p.connect(p.GUI)
         p.setAdditionalSearchPath(pybullet_data.getDataPath())
         p.setGravity(0, 0, -9.8)
         
@@ -28,6 +33,9 @@ class SIMULATION:
     def __del__(self):
         p.disconnect()
 
+    def Get_Fitness(self):
+        self.robot.Get_Fitness()
+
     def Run(self):
 
         for i in range(1000):
@@ -36,5 +44,5 @@ class SIMULATION:
             self.robot.Think()
             self.robot.Act(i)
  
-            time.sleep(1/100)
+            time.sleep(1/99999999)
             
