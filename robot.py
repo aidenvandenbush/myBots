@@ -8,13 +8,18 @@ import numpy
 import time
 import random
 import constants as c
+import os
 
 class ROBOT:
-    def __init__(self):
+    def __init__(self, solutionID):
         self.sensors = {}
         self.motors = {}
+        self.solutionID = solutionID
+
         self.robotId = p.loadURDF("body.urdf")
-        self.nn = NEURAL_NETWORK("brain.nndf")
+        self.nn = NEURAL_NETWORK("brain" + self.solutionID + ".nndf")
+        
+        os.system("del brain" + self.solutionID + ".nndf")
 
     def Prepare_To_Sense(self):
         for linkName in pyrosim.linkNamesToIndices:
@@ -44,9 +49,11 @@ class ROBOT:
         positionOfLinkZero = stateOfLinkZero[0]
         xCoordinateOfLinkZero = positionOfLinkZero[0]
 
-        f = open("fitness.txt", "w")
+        f = open("tmp" + self.solutionID + ".txt", "w")
         f.write(str(xCoordinateOfLinkZero))
         f.close()
+
+        os.rename("tmp" + str(self.solutionID) + ".txt", "fitness" + str(self.solutionID) + ".txt")
 
 
 

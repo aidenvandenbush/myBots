@@ -13,4 +13,5 @@ amplitudeBack = numpy.pi/4
 frequencyBack = 10
 phaseOffsetBack = numpy.pi/4
 
-numberOfGenerations = 5
+numberOfGenerations = 25
+populationSize = 10

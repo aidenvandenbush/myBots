@@ -10,9 +10,11 @@ import random
 import constants as c
 
 class SIMULATION:
-    def __init__(self, directOrGUI):
+    def __init__(self, directOrGUI, solutionID):
+        self.directOrGUI = directOrGUI
+        self.solutionID = solutionID
         
-        if directOrGUI == "DIRECT":
+        if self.directOrGUI == "DIRECT":
             self.physicsClient = p.connect(p.DIRECT)
         else:
             self.physicsClient = p.connect(p.GUI)
@@ -23,7 +25,7 @@ class SIMULATION:
         p.setGravity(0, 0, -9.8)
         
         self.world = WORLD()
-        self.robot = ROBOT()
+        self.robot = ROBOT(self.solutionID)
 
         pyrosim.Prepare_To_Simulate(self.robot.robotId)
         self.robot.Prepare_To_Sense()
@@ -44,5 +46,6 @@ class SIMULATION:
             self.robot.Think()
             self.robot.Act(i)
  
-            time.sleep(1/99999999)
+            if self.directOrGUI == "GUI":
+                time.sleep(1/99999999)
             
