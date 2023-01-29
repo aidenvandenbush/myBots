@@ -57,10 +57,11 @@ class PARALLEL_HILL_CLIMBER:
                 self.parent[i] = self.children[i]
 
     def Print(self):
+        """
         print("\n")
         
         for i in range(len(self.parent)):
             print(self.parent[i].fitness, self.children[i].fitness)
         
         print("\n")
-
+        """

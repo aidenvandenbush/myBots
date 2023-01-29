@@ -13,5 +13,10 @@ amplitudeBack = numpy.pi/4
 frequencyBack = 10
 phaseOffsetBack = numpy.pi/4
 
-numberOfGenerations = 25
-populationSize = 10
+numberOfGenerations = 15
+populationSize = 7
+
+numSensorNeurons = 9
+numMotorNeurons = 8
+
+motorJointRange = .2
