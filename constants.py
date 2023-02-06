@@ -6,17 +6,13 @@ import time
 import random
 
 amplitudeFront = numpy.pi/4
-frequencyFront = 15
+frequencyFront = 10
 phaseOffsetFront = 0
 
-amplitudeBack = numpy.pi/4
-frequencyBack = 10
-phaseOffsetBack = numpy.pi/4
+numberOfGenerations = 10
+populationSize = 5
 
-numberOfGenerations = 15
-populationSize = 7
+numSensorNeurons = 5
+numMotorNeurons = 4
 
-numSensorNeurons = 9
-numMotorNeurons = 8
-
-motorJointRange = .2
+motorJointRange = .5
