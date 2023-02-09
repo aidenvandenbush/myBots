@@ -12,12 +12,7 @@ class PARALLEL_HILL_CLIMBER:
         self.nextAvailableID = 0
         for i in range(c.populationSize):
             self.parent[i] = SOLUTION(self.nextAvailableID)
-            self.nextAvailableID += 1
-
-            if (i == 0):
-                self.parent[0].Start_Simulation("GUI")
-                self.parent[0].Wait_For_Simulation_To_End()
-        
+            self.nextAvailableID += 1      
 
     def Evolve(self):
         self.Evaluate(self.parent)
@@ -36,8 +31,6 @@ class PARALLEL_HILL_CLIMBER:
     def Show_Best(self):
         self.parent[len(self.parent) - 1].Start_Simulation("GUI")
 
-
-        
     def Spawn(self):
         self.children = {}
 
