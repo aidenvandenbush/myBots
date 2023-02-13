@@ -13,6 +13,7 @@ class SOLUTION:
         self.numberSensorNeurons = 0
         self.numberMotorNeurons = 0
         self.sensorList = []
+        self.jointNameList = []
 
     def Evaluate(self, mode):
         pass
@@ -48,41 +49,81 @@ class SOLUTION:
     def Create_Body(self):
         pyrosim.Start_URDF("body.urdf")
 
-        self.numberOfLinks = random.randint(3,10)
+        self.numberOfLinks = random.randint(2, 4)
 
         for i in range(self.numberOfLinks+1):
             self.sensorList.append(random.randint(0, 1))
 
-        xDim = random.random()/2 + .5
-        yDim = random.random()/2 + .5
-        zDim = random.random()/2 + .5
+        xDim = random.random() + .25
+        yDim = random.random() + .25
+        zDim = random.random() + .25
 
         if self.sensorList[0] == 1:
             colorString = '    <color rgba="0 1.0 0 1.0"/>'
         else:
             colorString = '    <color rgba="0 0 1.0 1.0"/>'
 
-        pyrosim.Send_Cube(colorString,name=str(0), pos=[-1*self.numberOfLinks/2,0,zDim/2] , size=[xDim,yDim,zDim])
+        pyrosim.Send_Cube(colorString,name=str(0), pos=[0,0,zDim/2] , size=[xDim,yDim,zDim])
 
         for i in range(self.numberOfLinks):
-
-            jointName = str(i) + "_" + str(i+1)
-
-            if i == 0:
-                pyrosim.Send_Joint( name = jointName , parent= str(i) , child = str(i+1) , type = "revolute", position = [-1*self.numberOfLinks/2+xDim/2,0,zDim/2], jointAxis = "0 1 1")
-            else:
-                pyrosim.Send_Joint( name = jointName , parent= str(i) , child = str(i+1) , type = "revolute", position = [xDim,0,0], jointAxis = "0 1 1")
-            
-            xDim = random.random()/2 + .5
-            yDim = random.random()/2 + .5
-            zDim = random.random()/2 + .5
+            # create joint at random point on parent cube
+            jointName = str(0) + "_" + str(i+1)
+            self.jointNameList.append(jointName)
 
             if self.sensorList[i+1] == 1:
                 colorString = '    <color rgba="0 1.0 0 1.0"/>'
             else:
                 colorString = '    <color rgba="0 0 1.0 1.0"/>'
 
-            pyrosim.Send_Cube(colorString,name=str(i+1), pos=[xDim/2,0,0] , size=[xDim,yDim,zDim])
+            d = random.randint(0, 4)
+        
+            if d == 0:
+                pos = [xDim/2, random.random()*yDim - yDim/2, random.random()*zDim]
+                pyrosim.Send_Joint( name = jointName , parent= str(0) , child = str(i+1) , type = "revolute", position = pos, jointAxis = "0 1 1")
+
+                x = random.random() + .5
+                y = random.random() * .5
+                z = random.random() * .5
+
+                pyrosim.Send_Cube(colorString,name=str(i+1), pos=[x/2,0,0] , size=[x,y,z])
+
+            elif d == 1:
+                pos = [-xDim/2, random.random()*yDim - yDim/2, random.random()*zDim]
+                pyrosim.Send_Joint( name = jointName , parent= str(0) , child = str(i+1) , type = "revolute", position = pos, jointAxis = "0 1 1")
+
+                x = random.random() + .5
+                y = random.random() * .5
+                z = random.random() * .5
+
+                pyrosim.Send_Cube(colorString,name=str(i+1), pos=[-x/2,0,0] , size=[x,y,z])
+
+            elif d == 2:
+                pos = [random.random()*xDim - xDim/2, yDim/2, random.random()*zDim]
+                pyrosim.Send_Joint( name = jointName , parent= str(0) , child = str(i+1) , type = "revolute", position = pos, jointAxis = "1 0 1")
+
+                x = random.random() * .5
+                y = random.random() + .5
+                z = random.random() * .5
+
+                pyrosim.Send_Cube(colorString,name=str(i+1), pos=[0,y/2,0] , size=[x,y,z])
+            elif d == 3:
+                pos = [random.random()*xDim - xDim/2, -yDim/2, random.random()*zDim]
+                pyrosim.Send_Joint( name = jointName , parent= str(0) , child = str(i+1) , type = "revolute", position = pos, jointAxis = "1 0 1")
+
+                x = random.random() * .5
+                y = random.random() + .5
+                z = random.random() * .5
+
+                pyrosim.Send_Cube(colorString,name=str(i+1), pos=[0,-y/2,0] , size=[x,y,z])
+            elif d == 4:
+                pos = [random.random()*xDim - xDim/2, random.random()*yDim - yDim/2, zDim]
+                pyrosim.Send_Joint( name = jointName , parent= str(0) , child = str(i+1) , type = "revolute", position = pos, jointAxis = "1 1 0")
+                
+                x = random.random() * .5
+                y = random.random() * .5
+                z = random.random() + .5
+
+                pyrosim.Send_Cube(colorString,name=str(i+1), pos=[0,0,z/2] , size=[x,y,z])
 
         pyrosim.End()
     
@@ -99,8 +140,7 @@ class SOLUTION:
                 nameNumber += 1
 
         for i in range(self.numberOfLinks):
-            jointName = str(i) + "_" + str(i+1)
-            pyrosim.Send_Motor_Neuron(name = nameNumber , jointName = jointName)
+            pyrosim.Send_Motor_Neuron(name = nameNumber , jointName = self.jointNameList[i])
 
             self.numberMotorNeurons += 1
             nameNumber += 1
