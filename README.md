@@ -4,6 +4,9 @@ In this branch I created a program to generate random 3D creatures. Creatures co
 
 To run this program, simply click the run button in the "button.py" file.
 
+![Drawing](https://user-images.githubusercontent.com/110938963/218634638-755852b8-d4ff-4512-8ae7-12e7b2906b26.png)
+(a 2D example of a possible body plan)
+
 This takes inspiration from https://www.reddit.com/r/ludobots/
 
 This program is built using pyrosim.
