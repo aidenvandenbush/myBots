@@ -9,7 +9,7 @@ amplitudeFront = numpy.pi/4
 frequencyFront = 10
 phaseOffsetFront = 0
 
-numberOfGenerations = 1
+numberOfGenerations = 3
 populationSize = 1
 
 numSensorNeurons = 5

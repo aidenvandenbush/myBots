@@ -3,5 +3,5 @@ import os
 
 
 phc = PARALLEL_HILL_CLIMBER()
-#phc.Evolve()
-phc.Show_Best()
+phc.Evolve()
+#phc.Show_Best()

@@ -7,16 +7,13 @@ import constants as c
 
 class SOLUTION:
     def __init__(self, nextAvailableID):
-        self.weights = 0
+        
         self.myID = nextAvailableID
         self.numberOfLinks = 0
         self.numberSensorNeurons = 0
         self.numberMotorNeurons = 0
         self.sensorList = []
         self.jointNameList = []
-
-    def Evaluate(self, mode):
-        pass
 
     def Start_Simulation(self, mode):
         self.Create_World()
@@ -49,7 +46,7 @@ class SOLUTION:
     def Create_Body(self):
         pyrosim.Start_URDF("body.urdf")
 
-        self.numberOfLinks = random.randint(2, 4)
+        self.numberOfLinks = random.randint(4, 6)
 
         for i in range(self.numberOfLinks+1):
             self.sensorList.append(random.randint(0, 1))
