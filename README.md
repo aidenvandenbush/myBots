@@ -1,6 +1,6 @@
 In this branch I created a program to generate and evolve random 3D creatures. Creatures consist of a randomly sized main body cube. Randomly sized limbs are then randomly attached to any side of the body. Limbs can only attach to the main body cube and not to each other. The creature can have 4-6 limbs. Each limb consists of a motorized joint. Each joint acts as a ball joint. The motors are controlled by touch sensors throughout the creature. Body parts with touch sensors are green. Body parts without sensors are blue. The touch sensors are connected to each motor in the body to create synapses. Each synapse is given a random weight. This leads to random motion in the motors when the touch sensors are activated.
 
-Each creature can be evolved for a specified number of generations. The current number of generations is 500. The evolve method removes one random limb on the creature and replaces it with a new random limb. 
+Each creature can be evolved for a specified number of generations. The current number of generations is 500. The evolve method removes one limb at random from the creature and replaces it with a new random limb. New limbs can be placed anywhere on the body cube just like the original limbs.
 
 To run this program, simply click the run button in the "button.py" file.
 
