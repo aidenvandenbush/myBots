@@ -7,13 +7,31 @@ import constants as c
 
 class SOLUTION:
     def __init__(self, nextAvailableID):
-        
+
         self.myID = nextAvailableID
-        self.numberOfLinks = 0
-        self.numberSensorNeurons = 0
-        self.numberMotorNeurons = 0
-        self.sensorList = []
+        self.numberOfLinks = random.randint(4, 6)
+
+        self.randomNumbers = []
+        for i in range(1000):
+            self.randomNumbers.append(random.random())
+
+        self.d = []
+        for i in range(self.numberOfLinks):
+            self.d.append(random.randint(0, 4))
+        
+        self.numberMotorNeurons = self.numberOfLinks
+        
+        self.sensorList = [1]
+        self.numberSensorNeurons = 1
+        for i in range(self.numberOfLinks):
+            x = random.randint(0, 1)
+            self.sensorList.append(x)
+            if x == 1:
+                self.numberSensorNeurons += 1 
+
+
         self.jointNameList = []
+        self.weights = numpy.random.rand(self.numberSensorNeurons, self.numberMotorNeurons) * 2 - 1
 
     def Start_Simulation(self, mode):
         self.Create_World()
@@ -23,7 +41,7 @@ class SOLUTION:
     
     def Wait_For_Simulation_To_End(self):
         while not os.path.exists("fitness" + str(self.myID) + ".txt"):
-            time.sleep(0.05)
+            time.sleep(0.1)
 
         f = open("fitness" + str(self.myID) + ".txt", "r")
         self.fitness = float(f.read())
@@ -33,7 +51,20 @@ class SOLUTION:
 
 
     def Mutate(self):
-        self.weights[random.randint(0, self.numberSensorNeurons-1)][random.randint(0, self.numberMotorNeurons-1)] = random.random() * 2 - 1
+        #self.weights[random.randint(0, self.numberSensorNeurons-1)][random.randint(0, self.numberMotorNeurons-1)] = random.random() * 2 - 1
+        #self.randomNumbers = []
+        #for i in range(1000):
+        #    self.randomNumbers.append(random.random())
+        linkIndex = random.randint(0, self.numberOfLinks-1)
+        multiplier = linkIndex * 25 + 3
+        side = random.randint(0, 4)
+        self.d[linkIndex] = side
+
+        self.randomNumbers[multiplier + side*5] = random.random()
+        self.randomNumbers[multiplier + side*5 + 1] = random.random()
+        self.randomNumbers[multiplier + side*5 + 2] = random.random()
+        self.randomNumbers[multiplier + side*5 + 3] = random.random()
+        self.randomNumbers[multiplier + side*5 + 4] = random.random()
 
     def Set_ID(self, newID):
         self.myID = newID
@@ -46,14 +77,9 @@ class SOLUTION:
     def Create_Body(self):
         pyrosim.Start_URDF("body.urdf")
 
-        self.numberOfLinks = random.randint(4, 6)
-
-        for i in range(self.numberOfLinks+1):
-            self.sensorList.append(random.randint(0, 1))
-
-        xDim = random.random() + .25
-        yDim = random.random() + .25
-        zDim = random.random() + .25
+        xDim = self.randomNumbers[0] + .25
+        yDim = self.randomNumbers[1] + .25
+        zDim = self.randomNumbers[2] + .25
 
         if self.sensorList[0] == 1:
             colorString = '    <color rgba="0 1.0 0 1.0"/>'
@@ -62,6 +88,7 @@ class SOLUTION:
 
         pyrosim.Send_Cube(colorString,name=str(0), pos=[0,0,zDim/2] , size=[xDim,yDim,zDim])
 
+        randNumCount = 3
         for i in range(self.numberOfLinks):
             # create joint at random point on parent cube
             jointName = str(0) + "_" + str(i+1)
@@ -71,56 +98,55 @@ class SOLUTION:
                 colorString = '    <color rgba="0 1.0 0 1.0"/>'
             else:
                 colorString = '    <color rgba="0 0 1.0 1.0"/>'
-
-            d = random.randint(0, 4)
         
-            if d == 0:
-                pos = [xDim/2, random.random()*yDim - yDim/2, random.random()*zDim]
+            if self.d[i] == 0:
+                pos = [xDim/2, self.randomNumbers[randNumCount]*yDim - yDim/2, self.randomNumbers[randNumCount+1]*zDim]
                 pyrosim.Send_Joint( name = jointName , parent= str(0) , child = str(i+1) , type = "revolute", position = pos, jointAxis = "0 1 1")
 
-                x = random.random() + .5
-                y = random.random() * .5
-                z = random.random() * .5
+                x = self.randomNumbers[randNumCount+2] + 1
+                y = self.randomNumbers[randNumCount+3] * .5
+                z = self.randomNumbers[randNumCount+4] * .5
 
-                pyrosim.Send_Cube(colorString,name=str(i+1), pos=[x/2,0,0] , size=[x,y,z])
+                pyrosim.Send_Cube(colorString,name=str(i+1), pos=[x/2,0,z/2] , size=[x,y,z])
 
-            elif d == 1:
-                pos = [-xDim/2, random.random()*yDim - yDim/2, random.random()*zDim]
+            elif self.d[i] == 1:
+                pos = [-xDim/2, self.randomNumbers[randNumCount+5]*yDim - yDim/2, self.randomNumbers[randNumCount+6]*zDim]
                 pyrosim.Send_Joint( name = jointName , parent= str(0) , child = str(i+1) , type = "revolute", position = pos, jointAxis = "0 1 1")
 
-                x = random.random() + .5
-                y = random.random() * .5
-                z = random.random() * .5
+                x = self.randomNumbers[randNumCount+7] + 1
+                y = self.randomNumbers[randNumCount+8] * .5
+                z = self.randomNumbers[randNumCount+9] * .5
 
-                pyrosim.Send_Cube(colorString,name=str(i+1), pos=[-x/2,0,0] , size=[x,y,z])
-
-            elif d == 2:
-                pos = [random.random()*xDim - xDim/2, yDim/2, random.random()*zDim]
+                pyrosim.Send_Cube(colorString,name=str(i+1), pos=[-x/2,0,z/2] , size=[x,y,z])
+                
+            elif self.d[i] == 2:
+                pos = [self.randomNumbers[randNumCount+10]*xDim - xDim/2, yDim/2, self.randomNumbers[randNumCount+11]*zDim]
                 pyrosim.Send_Joint( name = jointName , parent= str(0) , child = str(i+1) , type = "revolute", position = pos, jointAxis = "1 0 1")
 
-                x = random.random() * .5
-                y = random.random() + .5
-                z = random.random() * .5
+                x = self.randomNumbers[randNumCount+12] * .5
+                y = self.randomNumbers[randNumCount+13] + 1
+                z = self.randomNumbers[randNumCount+14] * .5
 
-                pyrosim.Send_Cube(colorString,name=str(i+1), pos=[0,y/2,0] , size=[x,y,z])
-            elif d == 3:
-                pos = [random.random()*xDim - xDim/2, -yDim/2, random.random()*zDim]
+                pyrosim.Send_Cube(colorString,name=str(i+1), pos=[0,y/2,z/2] , size=[x,y,z])
+            elif self.d[i] == 3:
+                pos = [self.randomNumbers[randNumCount+15]*xDim - xDim/2, -yDim/2, self.randomNumbers[randNumCount+16]*zDim]
                 pyrosim.Send_Joint( name = jointName , parent= str(0) , child = str(i+1) , type = "revolute", position = pos, jointAxis = "1 0 1")
 
-                x = random.random() * .5
-                y = random.random() + .5
-                z = random.random() * .5
+                x = self.randomNumbers[randNumCount+17] * .5
+                y = self.randomNumbers[randNumCount+18] + 1
+                z = self.randomNumbers[randNumCount+19] * .5
 
-                pyrosim.Send_Cube(colorString,name=str(i+1), pos=[0,-y/2,0] , size=[x,y,z])
-            elif d == 4:
-                pos = [random.random()*xDim - xDim/2, random.random()*yDim - yDim/2, zDim]
+                pyrosim.Send_Cube(colorString,name=str(i+1), pos=[0,-y/2,z/2] , size=[x,y,z])
+            elif self.d[i] == 4:
+                pos = [self.randomNumbers[randNumCount+20]*xDim - xDim/2, self.randomNumbers[randNumCount+21]*yDim - yDim/2, zDim]
                 pyrosim.Send_Joint( name = jointName , parent= str(0) , child = str(i+1) , type = "revolute", position = pos, jointAxis = "1 1 0")
                 
-                x = random.random() * .5
-                y = random.random() * .5
-                z = random.random() + .5
+                x = self.randomNumbers[randNumCount+22] * .5
+                y = self.randomNumbers[randNumCount+23] * .5
+                z = self.randomNumbers[randNumCount+24]
 
                 pyrosim.Send_Cube(colorString,name=str(i+1), pos=[0,0,z/2] , size=[x,y,z])
+            randNumCount += 25
 
         pyrosim.End()
     
@@ -132,17 +158,12 @@ class SOLUTION:
         
         for i in range(self.numberOfLinks+1):
             if self.sensorList[i] == 1:
-                pyrosim.Send_Sensor_Neuron(name = nameNumber , linkName = str(i))  
-                self.numberSensorNeurons += 1  
+                pyrosim.Send_Sensor_Neuron(name = nameNumber , linkName = str(i))   
                 nameNumber += 1
 
         for i in range(self.numberOfLinks):
             pyrosim.Send_Motor_Neuron(name = nameNumber , jointName = self.jointNameList[i])
-
-            self.numberMotorNeurons += 1
             nameNumber += 1
-
-        self.weights = numpy.random.rand(self.numberSensorNeurons, self.numberMotorNeurons) * 2 - 1
 
         for currentRow in range(self.numberSensorNeurons):
             for currentColumn in range(self.numberMotorNeurons):
