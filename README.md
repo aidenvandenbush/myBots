@@ -5,6 +5,7 @@ Each creature can be evolved for a specified number of generations. The current 
 To run this program, simply click the run button in the "button.py" file.
 
 ![Untitled design](https://user-images.githubusercontent.com/110938963/220187874-6f3d3b2f-1173-4c84-890a-fc218051418f.png)
+(An example morphology for the creature. Limbs can attach on any side except for the bottom.)
 
 Joint locations are determined by generating random coordinates anywhere on the body.
 Limbs are then placed at each joint location. Limb sizes are determined by generating random numbers.
