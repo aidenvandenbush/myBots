@@ -55,20 +55,23 @@ class PARALLEL_HILL_CLIMBER:
             solutions[i].Wait_For_Simulation_To_End()
 
     def Select(self):
+        maxFitness = -99999
         for i in range(len(self.parent)):
             if self.parent[i].fitness < self.children[i].fitness:
                 self.parent[i] = self.children[i]
             
-            g = open("fit.txt", "a")
-            g.write(str(self.parent[i].fitness) + "\n")
-            g.close()
-            
+            if self.parent[i].fitness > maxFitness:
+                maxFitness = self.parent[i].fitness
+
             print(self.parent[i].fitness)
             print("\n")
             print(self.children[i].fitness)
             print("\n")
             print("\n")
-            print("\n")
+    
+        g = open("fit.txt", "a")
+        g.write(str(maxFitness) + "\n")
+        g.close()
 
     def Print(self):
         """
