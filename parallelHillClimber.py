@@ -6,10 +6,12 @@ import os
 class PARALLEL_HILL_CLIMBER:
     def __init__(self):
         os.system("del brain*.nndf")
+        os.system("del body*.urdf")
         os.system("del fitness*.txt")
 
         self.parent = {}
         self.nextAvailableID = 0
+        self.maxFitness = -99999
         for i in range(c.populationSize):
             self.parent[i] = SOLUTION(self.nextAvailableID)
             self.nextAvailableID += 1      
@@ -30,9 +32,9 @@ class PARALLEL_HILL_CLIMBER:
         
         
     def Show_Best(self):
-        #self.parent[0].Start_Simulation("GUI")
-        #self.parent[0].Wait_For_Simulation_To_End()
-        self.parent[len(self.parent) - 1].Start_Simulation("GUI")
+        for i in range(len(self.parent)):
+            if self.parent[i].fitness == self.maxFitness:
+                self.parent[i].Start_Simulation("GUI")
 
     def Spawn(self):
         self.children = {}
@@ -55,22 +57,20 @@ class PARALLEL_HILL_CLIMBER:
             solutions[i].Wait_For_Simulation_To_End()
 
     def Select(self):
-        maxFitness = -99999
+       
         for i in range(len(self.parent)):
             if self.parent[i].fitness < self.children[i].fitness:
                 self.parent[i] = self.children[i]
             
-            if self.parent[i].fitness > maxFitness:
-                maxFitness = self.parent[i].fitness
+            if self.parent[i].fitness > self.maxFitness:
+                self.maxFitness = self.parent[i].fitness
 
             print(self.parent[i].fitness)
-            print("\n")
             print(self.children[i].fitness)
-            print("\n")
             print("\n")
     
         g = open("fit.txt", "a")
-        g.write(str(maxFitness) + "\n")
+        g.write(str(self.maxFitness) + "\n")
         g.close()
 
     def Print(self):

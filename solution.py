@@ -34,14 +34,15 @@ class SOLUTION:
         self.weights = numpy.random.rand(self.numberSensorNeurons, self.numberMotorNeurons) * 2 - 1
 
     def Start_Simulation(self, mode):
-        self.Create_World()
+        if self.myID == 0:
+            self.Create_World()
         self.Create_Body()
         self.Create_Brain()
         os.system("start /B python simulate.py " + mode + " " + str(self.myID))
     
     def Wait_For_Simulation_To_End(self):
         while not os.path.exists("fitness" + str(self.myID) + ".txt"):
-            time.sleep(0.1)
+            time.sleep(1)
 
         f = open("fitness" + str(self.myID) + ".txt", "r")
         self.fitness = float(f.read())
@@ -75,7 +76,7 @@ class SOLUTION:
         pyrosim.End()
 
     def Create_Body(self):
-        pyrosim.Start_URDF("body.urdf")
+        pyrosim.Start_URDF("body" + str(self.myID) + ".urdf")
 
         xDim = self.randomNumbers[0] + .25
         yDim = self.randomNumbers[1] + .25

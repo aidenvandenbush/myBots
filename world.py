@@ -5,6 +5,7 @@ import numpy
 import time
 import random
 import constants as c
+import os
 
 class WORLD:
     def __init__(self):
