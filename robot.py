@@ -17,9 +17,15 @@ class ROBOT:
         self.solutionID = solutionID
 
         self.robotId = p.loadURDF("body" + self.solutionID + ".urdf")
+
+        self.blockId = p.loadURDF("block" + self.solutionID + ".urdf")
+
         self.nn = NEURAL_NETWORK("brain" + self.solutionID + ".nndf")
         
         os.system("del brain" + self.solutionID + ".nndf")
+
+        os.system("del block" + self.solutionID + ".urdf")
+
         os.system("del body" + self.solutionID + ".urdf")
 
     def Prepare_To_Sense(self):
@@ -46,12 +52,22 @@ class ROBOT:
         #self.nn.Print()
 
     def Get_Fitness(self):
-        basePositionAndOrientation = p.getBasePositionAndOrientation(self.robotId)
+        basePositionAndOrientation = p.getBasePositionAndOrientation(self.blockId)
         basePosition = basePositionAndOrientation[0]
         xPosition = basePosition[0]
 
+        basePositionAndOrientationBot = p.getBasePositionAndOrientation(self.robotId)
+        basePositionBot = basePositionAndOrientationBot[0]
+        xPositionBot = basePositionBot[0]
+
+        
+        if xPosition < xPositionBot:
+            x = 0
+        else:
+            x = xPositionBot
+
         f = open("tmp" + self.solutionID + ".txt", "w")
-        f.write(str(xPosition))
+        f.write(str(x))
         f.close()
 
         os.rename("tmp" + str(self.solutionID) + ".txt", "fitness" + str(self.solutionID) + ".txt")

@@ -17,7 +17,7 @@ class SOLUTION:
 
         self.d = []
         for i in range(self.numberOfLinks):
-            self.d.append(random.randint(0, 4))
+            self.d.append(random.randint(1, 4))
         
         self.numberMotorNeurons = self.numberOfLinks
         
@@ -37,6 +37,7 @@ class SOLUTION:
         if self.myID == 0:
             self.Create_World()
         self.Create_Body()
+        self.Create_Block()
         self.Create_Brain()
         os.system("start /B python simulate.py " + mode + " " + str(self.myID))
     
@@ -52,26 +53,33 @@ class SOLUTION:
 
 
     def Mutate(self):
-        #self.weights[random.randint(0, self.numberSensorNeurons-1)][random.randint(0, self.numberMotorNeurons-1)] = random.random() * 2 - 1
-        #self.randomNumbers = []
-        #for i in range(1000):
-        #    self.randomNumbers.append(random.random())
-        linkIndex = random.randint(0, self.numberOfLinks-1)
-        multiplier = linkIndex * 25 + 3
-        side = random.randint(0, 4)
-        self.d[linkIndex] = side
+        if (self.myID >= 6250):
+            self.weights[random.randint(0, self.numberSensorNeurons-1)][random.randint(0, self.numberMotorNeurons-1)] = random.random() * 2 - 1
+        else:
+            linkIndex = random.randint(0, self.numberOfLinks-1)
+            multiplier = linkIndex * 25 + 3
+            side = random.randint(1, 4)
+            self.d[linkIndex] = side
 
-        self.randomNumbers[multiplier + side*5] = random.random()
-        self.randomNumbers[multiplier + side*5 + 1] = random.random()
-        self.randomNumbers[multiplier + side*5 + 2] = random.random()
-        self.randomNumbers[multiplier + side*5 + 3] = random.random()
-        self.randomNumbers[multiplier + side*5 + 4] = random.random()
+            self.randomNumbers[multiplier + side*5] = random.random()
+            self.randomNumbers[multiplier + side*5 + 1] = random.random()
+            self.randomNumbers[multiplier + side*5 + 2] = random.random()
+            self.randomNumbers[multiplier + side*5 + 3] = random.random()
+            self.randomNumbers[multiplier + side*5 + 4] = random.random()
 
     def Set_ID(self, newID):
         self.myID = newID
 
     def Create_World(self):
         pyrosim.Start_SDF("world.sdf")
+
+        pyrosim.End()
+
+    def Create_Block(self):
+        pyrosim.Start_URDF("block" + str(self.myID) + ".urdf")
+
+        colorString = '    <color rgba="1.0 1.0 1.0 1.0"/>'
+        pyrosim.Send_Cube(colorString, name="block", pos=[1.25, 0, .25], size=[.5, .5, .5])
 
         pyrosim.End()
 
@@ -104,7 +112,7 @@ class SOLUTION:
                 pos = [xDim/2, self.randomNumbers[randNumCount]*yDim - yDim/2, self.randomNumbers[randNumCount+1]*zDim]
                 pyrosim.Send_Joint( name = jointName , parent= str(0) , child = str(i+1) , type = "revolute", position = pos, jointAxis = "0 1 1")
 
-                x = self.randomNumbers[randNumCount+2] + 1
+                x = self.randomNumbers[randNumCount+2]
                 y = self.randomNumbers[randNumCount+3] * .5
                 z = self.randomNumbers[randNumCount+4] * .5
 
