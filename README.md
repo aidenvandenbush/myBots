@@ -13,7 +13,7 @@ I tested both methods 5 times each, using a population size of 50 over 250 gener
 
 To run this program, simply click the run button in the "button.py" file. The population size and number of generations can be changed in the constants.py file.
 
-2 Minute Summary: https://youtu.be/xTxmNU9HIq0>
+2 Minute Summary: https://youtu.be/xTxmNU9HIq0
 
 <p align="center">
   <img src=https://user-images.githubusercontent.com/110938963/224574336-ab672e52-78bb-46da-a634-d1fd572c9874.gif>
