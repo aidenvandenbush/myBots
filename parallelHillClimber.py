@@ -34,7 +34,7 @@ class PARALLEL_HILL_CLIMBER:
     def Show_Best(self):
         for i in range(len(self.parent)):
             if self.parent[i].fitness == self.maxFitness:
-                self.parent[i].Start_Simulation("GUI")
+                self.parent[i].Start_Simulation("GUI", 1)
 
     def Spawn(self):
         self.children = {}
@@ -51,7 +51,7 @@ class PARALLEL_HILL_CLIMBER:
 
     def Evaluate(self, solutions):
         for i in range(c.populationSize):
-            solutions[i].Start_Simulation("DIRECT")
+            solutions[i].Start_Simulation("DIRECT", 0)
         
         for i in range(c.populationSize):
             solutions[i].Wait_For_Simulation_To_End()

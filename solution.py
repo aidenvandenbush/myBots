@@ -4,6 +4,7 @@ import os
 import random
 import time
 import constants as c
+import shutil
 
 class SOLUTION:
     def __init__(self, nextAvailableID):
@@ -33,12 +34,18 @@ class SOLUTION:
         self.jointNameList = []
         self.weights = numpy.random.rand(self.numberSensorNeurons, self.numberMotorNeurons) * 2 - 1
 
-    def Start_Simulation(self, mode):
+    def Start_Simulation(self, mode, best):
         if self.myID == 0:
             self.Create_World()
         self.Create_Body()
         self.Create_Block()
         self.Create_Brain()
+        """
+        if best == 1:
+            shutil.copy("brain" + str(self.myID) + ".nndf", "bestbrain2.nndf")
+            shutil.copy("body" + str(self.myID) + ".urdf", "bestbody2.urdf")
+        """
+
         os.system("start /B python simulate.py " + mode + " " + str(self.myID))
     
     def Wait_For_Simulation_To_End(self):
