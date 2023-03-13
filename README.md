@@ -1,4 +1,4 @@
-This is a program created for the Northwestern University class COMP_SCI 396: Artificial Life
+This is a program created for the Northwestern University class COMP_SCI 396: Artificial Life.
 
 This program creates random moving creatures through evolution. Creatures consist of a randomly sized main body cube. Randomly sized limbs are then attached to any side of the body. Limbs can only attach to the main body cube and not to each other. The creature can have 4-6 limbs. Each limb consists of a motorized joint, and each joint acts as a ball joint. The motors are controlled by touch sensors throughout the creature. Body parts with touch sensors are green. Body parts without sensors are blue. The touch sensors are connected to each motor in the body to create synapses. Each synapse is given a random weight. This leads to random motion in the motors when the touch sensors are activated.
 
@@ -11,7 +11,7 @@ The other method I used to evolve the creatures was the same as the first method
 I tested both methods 5 times each, using a population size of 50 over 250 generations. This led to a total of 125,000 simulations. The only variable changed between the two methods was the mutation method that was used. This allowed me to test which mutation method led to a higher fitness.
 
 
-To run this program, simply click the run button in the "button.py" file.
+To run this program, simply click the run button in the "button.py" file. The population size and number of generations can be changed in the constants.py file.
 
 2 Minute Summary: https://youtu.be/xTxmNU9HIq0
 
